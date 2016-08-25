@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact name="BadAppleAA:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BadAppleAA_jar</output-path>
+    <root id="root">
+      <element id="archive" name="BaAA.jar">
+        <element id="module-output" name="BaAA" />
+      </element>
+      <element id="library" level="project" name="lib" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/ABOUT.md" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/COPYING" />
+      <element id="file-copy" path="$PROJECT_DIR$/2ndreal_CGA.png_132x74_C4_A23_fullcp.aarec.zip" />
+      <element id="file-copy" path="$PROJECT_DIR$/2ndreal_CGA.png_132x74_C16_A23_fullcp.aarec.zip" />
+      <element id="file-copy" path="$PROJECT_DIR$/Bad_Apple_CGA.png_132x74_C4_A11.aarec.zip" />
+      <element id="file-copy" path="$PROJECT_DIR$/config.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/config_default.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/Bad_Apple_CGA.png_76x43_C4_A13.aarec.zip" />
+      <element id="file-copy" path="$PROJECT_DIR$/2ndreal_CGA.png_132x74_C4_A13.aarec.zip" />
+    </root>
+  </artifact>
+</component>
