@@ -98,6 +98,8 @@ public class BaAA extends BasicGame {
 
     public static AsciiAlgo imageToAA;
 
+    private boolean makeScreenRec;
+
     public BaAA() {
         super(appname);
     }
@@ -122,17 +124,18 @@ public class BaAA extends BasicGame {
             framename = prop.getProperty("sFramesDir");
             framesDir = "./assets/" + framename;
             gamma = intNullSafe(prop.getProperty("iGamma"), 220) * 0.01;
-            moreGrey = booleanNullSafe(prop.getProperty("b16Tones"), false);
+            moreGrey = new Boolean(prop.getProperty("b16Tones"));
             ditherAlgo = new Integer(prop.getProperty("iDitherAlgo"));
             testImageRef = prop.getProperty("sTestDisplayImage");
-            singleColour = booleanNullSafe(prop.getProperty("bSingleTone"), false);
-            fullCodePage = booleanNullSafe(prop.getProperty("bFullCodePage"), false);
+            singleColour = new Boolean(prop.getProperty("bSingleTone"));
+            fullCodePage = new Boolean(prop.getProperty("bFullCodePage"));
             algorithm = new Integer(prop.getProperty("iAsciiAlgo"));
             monitorCol = new Integer(prop.getProperty("iMonitorType"));
             showCredit = new Boolean(prop.getProperty("bDemoCredit"));
             //colourAlgo = new Integer(prop.getProperty("iColourMode"));
             colourAlgo = 1;
-            recordMode = booleanNullSafe(prop.getProperty("bIsRecordMode"), false);
+            recordMode = new Boolean(prop.getProperty("bIsRecordMode"));
+            makeScreenRec = new Boolean(prop.getProperty("bMakeScreenRec"));
             replayFileRef = prop.getProperty("sRecordFileName");
             if (recordMode && replayFileRef != null && replayFileRef.length() > 0)
                 throw new IllegalStateException("Cannot record and play from the same file! " +
@@ -272,7 +275,11 @@ public class BaAA extends BasicGame {
             // count up frame
             if (!isPaused) {
                 deltaCount += delta;
-                frameCount = (int) Math.floor(deltaCount / frameLen) - 2 * framerate;
+
+                if (!makeScreenRec)
+                    frameCount = (int) Math.floor(deltaCount / frameLen) - 2 * framerate;
+                else
+                    frameCount += 1;
             }
 
             appgc.setTitle(
@@ -392,6 +399,17 @@ public class BaAA extends BasicGame {
         blendNormal();
 
         gg.drawImage(screenBuffer, 0, 0);
+
+        if (makeScreenRec) {
+            try {
+                ImageOut.write(screenBuffer, "./framerec/" + framename + String.format("%05d", frameCount) + ".png");
+            }
+            catch (Exception e) {
+                System.err.print("An error occured while exporting hardcopy: ");
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
 
         screenG.flush();
     }
@@ -540,13 +558,19 @@ public class BaAA extends BasicGame {
         }
     }
 
+    /**
+     * only useful if i := true
+     * @param string
+     * @param i
+     * @return
+     */
     private boolean booleanNullSafe(String string, boolean i) {
         if (string == null || string.length() < 1) return i;
         else return new Boolean(string);
     }
 
     private void displayCredits() {
-        aaframe.drawString("BA-AA", 3, 5, colors.length - 1);
+        aaframe.drawString("Ba-AA", 3, 5, colors.length - 1);
         aaframe.drawString("Code by Torvald, 2016", 3, 7, colors.length - 1);
         aaframe.drawString("Please refer to ABOUT.md for the information.", 3, 8, colors.length - 1);
         aaframe.drawString("...and don't try to find out what \"BA\" means.", 3, 10, colors.length - 1);

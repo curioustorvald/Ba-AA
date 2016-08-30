@@ -126,7 +126,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
             rangesX.forEach { println("range x: $it") }
             rangesY.forEach { println("range y: $it") }
 
-            for (bKey in 0..colourMap.size - 1) {
+            for (colourKey in 0..colourMap.size - 1) {
                 for (i in fontRange) {
                     if (exclude.contains(i)) continue
 
@@ -135,13 +135,13 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
 
                     var lumCalcBuffer = Luminosity(divSize, { 0 })
 
-                    if (fontRange.endInclusive < 128 && i == 32) { // exclude ' ' if in ASCII mode
+                    if ((i == 0 || i == 32) && colourKey == 0) { // exclude ' ' if in ASCII mode
                         if (!inverted)
                             lumCalcBuffer = Luminosity(divSize, { 0 })
                         else
                             lumCalcBuffer = Luminosity(divSize, { glyph.height * glyph.width * colourMap[0].oneTo256() })
                     }
-                    else {
+                    else if (colourKey >= 1 && i != 0 && i != 32) {
                         for (area in 0..divSize - 1) {
                             for (fx in rangesX[area % divW]) {
                                 for (fy in rangesY[area / divW]) {
@@ -150,7 +150,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
                                     if (pixel == 0f)
                                         b = colourMap[0].oneTo256()
                                     else {
-                                        b = colourMap[bKey].oneTo256()
+                                        b = colourMap[colourKey].oneTo256()
                                     }
 
                                     lumCalcBuffer[area] += b
@@ -159,15 +159,17 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
                         }
                     }
 
-                    brightnessMap.add(
-                            Pair(
-                                    lumCalcBuffer,
-                                    (bKey.shl(8) or i.and(0xFF)).toChar()
-                            ))
-                    glyphColMap.put(
-                            (bKey.shl(8) or i.and(0xFF)).toChar(),
-                            lumCalcBuffer
-                    )
+                    if ((colourKey == 0 && (i == 0 || i == 32)) || (colourKey >= 1 && i != 0 && i != 32)) {
+                        brightnessMap.add(
+                                Pair(
+                                        lumCalcBuffer,
+                                        (colourKey.shl(8) or i.and(0xFF)).toChar()
+                                ))
+                        glyphColMap.put(
+                                (colourKey.shl(8) or i.and(0xFF)).toChar(),
+                                lumCalcBuffer
+                        )
+                    }
                 }
             }
 

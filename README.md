@@ -1,4 +1,7 @@
-# BA-AA #
+# Ba-AA #
+
+* [Recorded demo 1 (Bad Apple)](https://www.youtube.com/watch?v=4slG_alf4so)
+* [Recorded demo 2 (Second Reality)](https://www.youtube.com/watch?v=sA_m8s9vtxY)
 
 ## About ##
 

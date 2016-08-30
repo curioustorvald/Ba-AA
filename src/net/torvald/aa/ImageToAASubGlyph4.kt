@@ -89,9 +89,10 @@ class ImageToAASubGlyph4 : AsciiAlgo {
     private val glyphColMap = HashMap<Char, Long>()
     private val sameLumStartIndices = HashMap<Long, Int>()
     private val sameLumEndIndices = HashMap<Long, Int>()
-    private val lumMapMatrix = Array<ArrayList<Int>>(4, { ArrayList() }) // stores unique elems, by position lumMapMatrix[position][index]
     private val lumMap = ArrayList<Long>() // Long: stored TL-TR-BL-BR; stores unique elems, regardless of position
     private val lumMapAll = ArrayList<Int>() // each element of Luminosity, unique values regardless of position
+    private val lumSortByDim = Array<ArrayList<Long>>(4, { ArrayList() }) // [position][luma-glyph pair], pos0: top-left, stores combined lum (aka glyph)
+    private val lumSortByDimElem = Array<ArrayList<Int>>(4, { ArrayList() }) // [position][luma-glyph pair], pos0: top-left, stores lum for each dimension
 
     private lateinit var imageBuffer: Image
 
@@ -117,7 +118,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
 
             val fontSheetW = fontSheet.width / fontW
 
-            for (bKey in 0..colourMap.size - 1) {
+            for (colourKey in 0..colourMap.size - 1) {
                 for (i in fontRange) {
                     if (exclude.contains(i)) continue
 
@@ -129,14 +130,14 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                     var glyphLumBottomLeft = 0
                     var glyphLumBottomRight = 0
 
-                    if (fontRange.endInclusive < 128 && i == 32) { // exclude ' ' if in ASCII mode
+                    if ((i == 0 || i == 32) && colourKey == 0) { // exclude ' ' if in ASCII mode
                         glyphLumTopLeft = if (!inverted) 0 else glyph.height * glyph.width * colourMap[0].oneTo256()
 
                         glyphLumTopRight = glyphLumTopLeft
                         glyphLumBottomLeft = glyphLumTopLeft
                         glyphLumBottomRight = glyphLumTopLeft
                     }
-                    else {
+                    else if (colourKey >= 1 && i != 0 && i != 32) {
                         // TODO more weighting on clustered pixels
 
                         // top-left part
@@ -147,7 +148,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                                 if (pixel == 0f)
                                     b = colourMap[0].oneTo256()
                                 else {
-                                    b = colourMap[bKey].oneTo256()
+                                    b = colourMap[colourKey].oneTo256()
                                 }
 
                                 glyphLumTopLeft += b
@@ -161,7 +162,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                                 if (pixel == 0f)
                                     b = colourMap[0].oneTo256()
                                 else {
-                                    b = colourMap[bKey].oneTo256()
+                                    b = colourMap[colourKey].oneTo256()
                                 }
 
                                 glyphLumBottomLeft += b
@@ -175,7 +176,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                                 if (pixel == 0f)
                                     b = colourMap[0].oneTo256()
                                 else {
-                                    b = colourMap[bKey].oneTo256()
+                                    b = colourMap[colourKey].oneTo256()
                                 }
 
                                 glyphLumTopRight += b
@@ -189,7 +190,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                                 if (pixel == 0f)
                                     b = colourMap[0].oneTo256()
                                 else {
-                                    b = colourMap[bKey].oneTo256()
+                                    b = colourMap[colourKey].oneTo256()
                                 }
 
                                 glyphLumBottomRight += b
@@ -197,21 +198,23 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                         }
                     }
 
-                    val luminosityPacked: Long =
-                            glyphLumTopLeft.toLong().shl(48) or
-                            glyphLumTopRight.toLong().shl(32) or
-                            glyphLumBottomLeft.toLong().shl(16) or
-                            glyphLumBottomRight.toLong()
+                    if ((colourKey == 0 && (i == 0 || i == 32)) || (colourKey >= 1 && i != 0 && i != 32)) {
+                        val luminosityPacked: Long =
+                                glyphLumTopLeft.toLong().shl(48) or
+                                        glyphLumTopRight.toLong().shl(32) or
+                                        glyphLumBottomLeft.toLong().shl(16) or
+                                        glyphLumBottomRight.toLong()
 
-                    brightnessMap.add(
-                            Pair(
-                                    luminosityPacked,
-                                    (bKey.shl(8) or i.and(0xFF)).toChar()
-                            ))
-                    glyphColMap.put(
-                            (bKey.shl(8) or i.and(0xFF)).toChar(),
-                            luminosityPacked
-                    )
+                        brightnessMap.add(
+                                Pair(
+                                        luminosityPacked,
+                                        (colourKey.shl(8) or i.and(0xFF)).toChar()
+                                ))
+                        glyphColMap.put(
+                                (colourKey.shl(8) or i.and(0xFF)).toChar(),
+                                luminosityPacked
+                        )
+                    }
                 }
             }
 
@@ -221,19 +224,25 @@ class ImageToAASubGlyph4 : AsciiAlgo {
             brightnessMap.forEach {
                 if (!lumMap.contains(it.first)) lumMap.add(it.first)
 
-                if (!lumMapMatrix[POS_TL].contains(it.first.getTopLeft())) lumMapMatrix[POS_TL].add(it.first.getTopLeft())
-                if (!lumMapMatrix[POS_TR].contains(it.first.getTopRight())) lumMapMatrix[POS_TR].add(it.first.getTopRight())
-                if (!lumMapMatrix[POS_BL].contains(it.first.getBottomLeft())) lumMapMatrix[POS_BL].add(it.first.getBottomLeft())
-                if (!lumMapMatrix[POS_BR].contains(it.first.getBottomRight())) lumMapMatrix[POS_BR].add(it.first.getBottomRight())
-
                 if (!lumMapAll.contains(it.first.getTopLeft())) lumMapAll.add(it.first.getTopLeft())
                 if (!lumMapAll.contains(it.first.getTopRight())) lumMapAll.add(it.first.getTopRight())
                 if (!lumMapAll.contains(it.first.getBottomLeft())) lumMapAll.add(it.first.getBottomLeft())
                 if (!lumMapAll.contains(it.first.getBottomRight())) lumMapAll.add(it.first.getBottomRight())
             }
 
+            for (j in 0..lumSortByDim.size - 1) {
+                for (i in 0..brightnessMap.size - 1) {
+                    lumSortByDim[j].add(brightnessMap[i].first)
+                    lumSortByDimElem[j].add(brightnessMap[i].first.ushr(16 * (3 - j)).and(0xFFFF).toInt())
+                }
+            }
+
             // sort everything required
-            lumMapMatrix.forEach { it.sort() }
+            for (dim in 0..3) {
+                lumSortByDim[dim].sortBy { it.ushr(16 * (3 - dim)).and(0xFFFF) }
+                lumSortByDimElem[dim].sort()
+            }
+
             lumMapAll.sort()
             lumMap.sort()
 
@@ -407,6 +416,11 @@ class ImageToAASubGlyph4 : AsciiAlgo {
         var dist: Int = 0
         var otherLum: Long
 
+        val lumPacked = lumTopLeft.and(0xFFFF).shl(48) +
+                lumTopRight.and(0xFFFF).shl(32) +
+                lumBottomLeft.and(0xFFFF).shl(16) +
+                lumBottomRight.and(0xFFFF)
+
         //println("Lum: $lumTopLeft+$lumTopRight+$lumBottomLeft+$lumBottomRight")
 
         //println("$argMin, $argMax")
@@ -423,7 +437,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
 
             if (dist < distMin) {
                 distMin = dist
-                lum = lumMap[cnt]
+                lum = otherLum
             }
         }
 
@@ -469,6 +483,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
      * 0 1 4 5 7 , find 3
      *
      * will return (1, 2), which corresponds value (1, 4) of which input value 3 is in between.
+     * @return pair of index
      */
     private fun binarySearchInterval(list: List<Int>, lum: Int): Pair<Int, Int> {
         var low: Int = 0
@@ -514,10 +529,10 @@ class ImageToAASubGlyph4 : AsciiAlgo {
 
         throw NullPointerException()
     }
-
     fun Char.getColourKey() = this.toInt().ushr(8).and(0x1F)
     fun Char.getAscii() = this.toInt().and(0xFF)
     fun Double.oneTo256() = this.times(255).roundInt()
     fun Long.toShorts() = arrayOf(this.getTopLeft(), this.getTopRight(), this.getBottomLeft(), this.getBottomRight())
-
 }
+
+fun ensureBoundary(size: Int, index: Int) = if (index >= size) size - 1 else if (index < 0) 0 else index

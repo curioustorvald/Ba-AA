@@ -2,9 +2,6 @@ out/*
 bin/*
 hs_err_pid*
 assets/*
-2ndreal_CGA.png_132x74_C4_A13.aarec.zip
-2ndreal_CGA.png_132x74_C4_A23_fullcp.aarec.zip
-2ndreal_CGA.png_132x74_C16_A23_fullcp.aarec.zip
-Bad_Apple_CGA.png_76x43_C4_A13.aarec.zip
-Bad_Apple_CGA.png_132x74_C4_A11.aarec.zip
+2ndreal_CGA.png*
+Bad_Apple_CGA.png*
 assets.zip
