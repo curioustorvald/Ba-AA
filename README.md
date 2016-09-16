@@ -24,7 +24,7 @@ One last note: don’t expect much about the performance, and don’t try to fin
 
 Before you play the demo, please unzip the ```assets.zip```. There should be ```assets``` directory created.
 
-If you don't see the zip file, get one from latest __[release](https://github.com/minjaesong/Ba-AA) (github)__
+If you don't see the zip file, get one from latest __[release](https://github.com/minjaesong/Ba-AA/releases) (github)__
 
 ### Execution ###
 
