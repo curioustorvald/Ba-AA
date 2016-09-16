@@ -244,7 +244,7 @@ public class BaAA extends BasicGame {
 
     private String nowplayng  = "Now playing . . . .                            ";
     private String howtopause = "Hit SPACE to pause/resume video.";
-    private String protip = "- Protip: it always looks better on CGA";
+    private String protip = "- Protip: it always looks better on milky.png";
 
     private boolean isPaused = false;
 
@@ -344,6 +344,7 @@ public class BaAA extends BasicGame {
             }
         }
 
+        g.translate(FRAMESIZE, FRAMESIZE);
         renderFrame(g);
     }
 
@@ -352,6 +353,9 @@ public class BaAA extends BasicGame {
 
     private final Color IBMGREEN = new Color(74, 255, 0);
     private final Color IBMAMBER = new Color(255, 183, 0);
+    private final Color MONITOR_BASE = new Color(24, 24, 24);
+
+    private static final int FRAMESIZE = 12;
 
     private void renderFrame(Graphics gg) {
         //g.setFont(font);
@@ -377,6 +381,13 @@ public class BaAA extends BasicGame {
                     screenG.fillRect(fontW * x, fontH * y, fontW, fontH);
                 }
             }
+        }
+
+        // colour base
+        if (monitorCol > 0) {
+            screenG.setColor(MONITOR_BASE);
+            blendScreen();
+            screenG.fillRect(0f, 0f, fontW * w, fontH * h);
         }
 
         // colour overlay
@@ -549,6 +560,13 @@ public class BaAA extends BasicGame {
         GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    private void blendScreen() {
+        // blend: SCREEN
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColorMask(true, true, true, true);
+        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_COLOR);
+    }
+
     private int intNullSafe(String string, int i) {
         try {
             return new Integer(string);
@@ -583,7 +601,7 @@ public class BaAA extends BasicGame {
     }
 
     public static void updateDisplayMode(int width, int height, int glyphWidth, int glyphHeight) throws SlickException {
-        appgc.setDisplayMode(width * glyphWidth, height * glyphHeight, false);
+        appgc.setDisplayMode(width * glyphWidth + 2 * FRAMESIZE, height * glyphHeight + 2 * FRAMESIZE, false);
         aaframe = new AAFrame(width, height);
         w = width;
         h = height;
