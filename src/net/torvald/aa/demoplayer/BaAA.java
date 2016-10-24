@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -486,9 +487,10 @@ public class BaAA extends BasicGame {
         // capture
         if (key == 35) { // H
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
-                ImageOut.write(screenBuffer, "./" + sdf.toString() + ".png");
-                System.out.println("Hardcopy exported as " + sdf.toString() + ".png");
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                ImageOut.write(screenBuffer, "./" + sdf.format(date) + ".png");
+                System.out.println("Hardcopy exported as " + sdf.format(date) + ".png");
             }
             catch (Exception e) {
                 System.err.print("An error occured while exporting hardcopy: ");
@@ -497,8 +499,9 @@ public class BaAA extends BasicGame {
         }
         else if (key == 20 && singleColour) { // T
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
-                String filename = "./" + sdf.toString() + ".txt";
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                String filename = "./" + sdf.format(date) + ".txt";
 
                 FileWriter writer = new FileWriter(new File(filename).getAbsoluteFile());
                 for (int i = 0; i < aaframe.getSizeof() >>> 1; i++) {
@@ -513,7 +516,7 @@ public class BaAA extends BasicGame {
 
                 writer.close();
 
-                System.out.println("Hardcopy (text) exported as " + sdf.toString() + ".txt");
+                System.out.println("Hardcopy (text) exported as " + sdf.format(date) + ".txt");
             }
             catch (Exception e) {
                 System.err.print("An error occured while exporting hardcopy (text): ");
