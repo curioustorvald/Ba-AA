@@ -1,8 +1,6 @@
 Manifest-Version: 1.0
-Class-Path: ibxm.jar lwjgl.jar slick.jar jinput.jar jogg-0.0.7.jar lwj
- gl_util.jar jorbis-0.0.15.jar kotlin-reflect.jar kotlin-runtime.jar k
- otlin-runtime-sources.jar ibxm.jar lwjgl.jar slick.jar jinput.jar jog
- g-0.0.7.jar lwjgl_util.jar jorbis-0.0.15.jar kotlin-reflect.jar kotli
- n-runtime.jar kotlin-runtime-sources.jar
+Class-Path: lib/ibxm.jar lib/lwjgl.jar lib/slick.jar lib/jinput.jar
+ lib/jogg-0.0.7.jar lib/lwjgl_util.jar lib/jorbis-0.0.15.jar lib/ko
+ tlin-reflect.jar lib/kotlin-runtime.jar
 Main-Class: net.torvald.aa.demoplayer.BaAA
 

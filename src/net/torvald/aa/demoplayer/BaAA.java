@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
@@ -132,8 +133,7 @@ public class BaAA extends BasicGame {
             algorithm = new Integer(prop.getProperty("iAsciiAlgo"));
             monitorCol = new Integer(prop.getProperty("iMonitorType"));
             showCredit = new Boolean(prop.getProperty("bDemoCredit"));
-            //colourAlgo = new Integer(prop.getProperty("iColourMode"));
-            colourAlgo = 1;
+            colourAlgo = new Integer(prop.getProperty("iColourMode"));
             recordMode = new Boolean(prop.getProperty("bIsRecordMode"));
             makeScreenRec = new Boolean(prop.getProperty("bMakeScreenRec"));
             replayFileRef = prop.getProperty("sRecordFileName");
@@ -426,6 +426,9 @@ public class BaAA extends BasicGame {
     }
 
     public static void main(String[] args) {
+        System.setProperty("java.library.path", "lib");
+        System.setProperty("org.lwjgl.librarypath", new File("lib").getAbsolutePath());
+
         appname = (args.length > 0 && args[0] != null && args[0].length() > 0) ? args[0] : appnameDefault;
 
         try {
@@ -483,8 +486,9 @@ public class BaAA extends BasicGame {
         // capture
         if (key == 35) { // H
             try {
-                ImageOut.write(screenBuffer, "./" + LocalDateTime.now().toString() + ".png");
-                System.out.println("Hardcopy exported as " + LocalDateTime.now().toString() + ".png");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
+                ImageOut.write(screenBuffer, "./" + sdf.toString() + ".png");
+                System.out.println("Hardcopy exported as " + sdf.toString() + ".png");
             }
             catch (Exception e) {
                 System.err.print("An error occured while exporting hardcopy: ");
@@ -493,7 +497,8 @@ public class BaAA extends BasicGame {
         }
         else if (key == 20 && singleColour) { // T
             try {
-                String filename = "./" + LocalDateTime.now().toString() + ".txt";
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddTHH-mm-ss");
+                String filename = "./" + sdf.toString() + ".txt";
 
                 FileWriter writer = new FileWriter(new File(filename).getAbsoluteFile());
                 for (int i = 0; i < aaframe.getSizeof() >>> 1; i++) {
@@ -508,7 +513,7 @@ public class BaAA extends BasicGame {
 
                 writer.close();
 
-                System.out.println("Hardcopy (text) exported as " + LocalDateTime.now().toString() + ".txt");
+                System.out.println("Hardcopy (text) exported as " + sdf.toString() + ".txt");
             }
             catch (Exception e) {
                 System.err.print("An error occured while exporting hardcopy (text): ");

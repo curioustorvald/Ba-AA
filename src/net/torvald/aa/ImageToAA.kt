@@ -411,6 +411,6 @@ fun Color.getLuminance(colourAlgo: Int, gamma: Double): Double =
             if (colourAlgo == 1)
                 (0.299 * r.sqr() + 0.587 * g.sqr() + 0.114 * b.sqr()).powerOf(0.5 * gamma)
             else if (colourAlgo == 0)
-                Math.pow((r + g + b) / 3.0, gamma)
+                Math.pow((3 * r + b + 4 * g) / 8.0, gamma)
             else
                 throw IllegalArgumentException("Unknown luminance algorithm: $colourAlgo")
