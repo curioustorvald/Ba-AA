@@ -95,7 +95,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     private val lumMap = ArrayList<Luminosity>() // stores unique elems, regardless of position
     private val lumMapAll = ArrayList<Int>() // each element of Luminosity, unique values regardless of position
 
-    private lateinit var brightnessKDTree: KDTree
+    private lateinit var brightnessKDTree: KDHeapifiedTree
 
     private lateinit var imageBuffer: Image
 
@@ -221,7 +221,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
             }
 
             // build k-d tree
-            brightnessKDTree = KDTree(brightnessMap, divSize)
+            brightnessKDTree = KDHeapifiedTree(brightnessMap, divSize)
 
             //sameLumStartIndices.forEach { luminosity, i -> println("$luminosity, starts from $i") }
             //sameLumEndIndices.forEach { luminosity, i -> println("$luminosity, ends at $i") }

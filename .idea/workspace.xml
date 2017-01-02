@@ -4,15 +4,8 @@
     <list default="true" id="46feafdd-d9b6-4919-87eb-8d64976b5614" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.properties" afterPath="$PROJECT_DIR$/config.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/AAFrame.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/AAFrame.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/ColouredFastFont.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/ColouredFastFont.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/KDTree.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/KDTree.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java" afterPath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameFetcher.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameFetcher.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FramePreloader.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FramePreloader.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameRecorder.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameRecorder.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameStreamer.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameStreamer.kt" />
     </list>
     <ignored path="$PROJECT_DIR$/assets/" />
     <ignored path="$PROJECT_DIR$/framerec/" />
@@ -32,11 +25,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="ImageToAASubGlyphArb.kt" pinned="false" current-in-tab="true">
+          <file leaf-file-name="ImageToAASubGlyphArb.kt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="364">
-                  <caret line="365" column="24" lean-forward="false" selection-start-line="365" selection-start-column="24" selection-end-line="365" selection-end-column="24" />
+                <state relative-caret-position="308">
+                  <caret line="223" column="45" lean-forward="true" selection-start-line="223" selection-start-column="45" selection-end-line="223" selection-end-column="45" />
                   <folding>
                     <element signature="e#24#107#0" expanded="true" />
                   </folding>
@@ -47,8 +40,18 @@
           <file leaf-file-name="KDTree.kt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDTree.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="378">
-                  <caret line="28" column="31" lean-forward="false" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
+                <state relative-caret-position="126">
+                  <caret line="9" column="10" lean-forward="false" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="KDHeapifiedTree.kt" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="210">
+                  <caret line="15" column="101" lean-forward="false" selection-start-line="15" selection-start-column="101" selection-end-line="15" selection-end-column="101" />
                   <folding />
                 </state>
               </provider>
@@ -57,8 +60,8 @@
           <file leaf-file-name="BaAA.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="391">
-                  <caret line="502" column="49" lean-forward="true" selection-start-line="502" selection-start-column="49" selection-end-line="502" selection-end-column="49" />
+                <state relative-caret-position="-772">
+                  <caret line="57" column="26" lean-forward="false" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="26" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -66,11 +69,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="config.properties" pinned="false" current-in-tab="false">
+          <file leaf-file-name="config.properties" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/config.properties">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="221">
-                  <caret line="65" column="13" lean-forward="true" selection-start-line="65" selection-start-column="13" selection-end-line="65" selection-end-column="13" />
+                <state relative-caret-position="340">
+                  <caret line="91" column="11" lean-forward="true" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="11" />
                   <folding />
                 </state>
               </provider>
@@ -83,8 +86,8 @@
           <file leaf-file-name="KDTree.kt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDTree.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-763">
-                  <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+                <state relative-caret-position="154">
+                  <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
                   <folding />
                 </state>
               </provider>
@@ -117,6 +120,11 @@
       <find>double</find>
       <find>import [A-Za-z.;]+\n</find>
       <find>TwoDNode</find>
+      <find>Color.</find>
+      <find>fun Color</find>
+      <find>getLumi</find>
+      <find>colourAlgo</find>
+      <find>KDT</find>
     </findStrings>
     <replaceStrings>
       <replace>kdtree</replace>
@@ -151,7 +159,6 @@
         <option value="$PROJECT_DIR$/src/net/torvald/aa/AsciiAlgo.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/AAFrame.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/ColouredFastFont.kt" />
-        <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAA.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyph4.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameFetcher.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FramePreloader.kt" />
@@ -159,9 +166,11 @@
         <option value="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameRecorder.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/FrameStreamer.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java" />
+        <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAA.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/KDTree.kt" />
-        <option value="$PROJECT_DIR$/config.properties" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" />
+        <option value="$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt" />
+        <option value="$PROJECT_DIR$/config.properties" />
       </list>
     </option>
   </component>
@@ -249,6 +258,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Ba-AA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Ba-AA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -747,16 +770,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAA.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="47" column="35" lean-forward="false" selection-start-line="47" selection-start-column="35" selection-end-line="47" selection-end-column="35" />
-          <folding>
-            <element signature="e#24#107#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyph4.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -815,39 +828,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java">
+    <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAA.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="502" column="49" lean-forward="true" selection-start-line="502" selection-start-column="49" selection-end-line="502" selection-end-column="49" />
+        <state relative-caret-position="-4865">
+          <caret line="28" column="79" lean-forward="true" selection-start-line="28" selection-start-column="79" selection-end-line="28" selection-end-column="79" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#24#107#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDTree.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="28" column="31" lean-forward="false" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="65" column="13" lean-forward="true" selection-start-line="65" selection-start-column="13" selection-end-line="65" selection-end-column="13" />
+        <state relative-caret-position="126">
+          <caret line="9" column="10" lean-forward="false" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="365" column="24" lean-forward="false" selection-start-line="365" selection-start-column="24" selection-end-line="365" selection-end-column="24" />
+        <state relative-caret-position="308">
+          <caret line="223" column="45" lean-forward="true" selection-start-line="223" selection-start-column="45" selection-end-line="223" selection-end-column="45" />
           <folding>
             <element signature="e#24#107#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="15" column="101" lean-forward="false" selection-start-line="15" selection-start-column="101" selection-end-line="15" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-772">
+          <caret line="57" column="26" lean-forward="false" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="91" column="11" lean-forward="true" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
