@@ -20,7 +20,7 @@ class ColouredFastFont(fontRef: String, val fontW: Int, val fontH: Int) : Font {
     private var sheetH = 0
 
 
-    private lateinit var sheetImageBuffer: Image
+    private var sheetImageBuffer: Image
 
     init {
         val getSizeImg = Image(fontRef)

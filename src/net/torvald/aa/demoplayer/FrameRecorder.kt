@@ -25,7 +25,7 @@ class FrameRecorder(
 
     private lateinit var frameInput: Image
 
-    private lateinit var outfile: File
+    private var outfile: File
 
     private val estmSize: Int
 

@@ -597,7 +597,7 @@ public class BaAA extends BasicGame {
 
     private void displayCredits() {
         aaframe.drawString("Ba-AA", 3, 5, colors.length - 1);
-        aaframe.drawString("Code by Torvald, 2016", 3, 7, colors.length - 1);
+        aaframe.drawString("Code by Torvald, 2016-17", 3, 7, colors.length - 1);
         aaframe.drawString("Please refer to ABOUT.md for the information.", 3, 8, colors.length - 1);
         aaframe.drawString("...and don't try to find out what \"BA\" means.", 3, 10, colors.length - 1);
     }

@@ -28,7 +28,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     private var ditherAlgo = 0
     private var colourAlgo = 0
 
-    private val divSize: Int get() = divW * divH
+    private val divSize = divW * divH
 
     private lateinit var fontRange: IntRange
 
@@ -94,6 +94,8 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     private val lumMapMatrix = Array<ArrayList<Int>>(divSize, { ArrayList() }) // stores unique elems, by position lumMapMatrix[position][index]
     private val lumMap = ArrayList<Luminosity>() // stores unique elems, regardless of position
     private val lumMapAll = ArrayList<Int>() // each element of Luminosity, unique values regardless of position
+
+    private lateinit var brightnessKDTree: KDTree
 
     private lateinit var imageBuffer: Image
 
@@ -217,6 +219,9 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
                     sameLumStartIndices.put(nextLum, i + 1)
                 }
             }
+
+            // build k-d tree
+            brightnessKDTree = KDTree(brightnessMap, divSize)
 
             //sameLumStartIndices.forEach { luminosity, i -> println("$luminosity, starts from $i") }
             //sameLumEndIndices.forEach { luminosity, i -> println("$luminosity, ends at $i") }
@@ -343,7 +348,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         // find closest: "Closest pair of points problem"
         // TODO better algorithm
         // brute force
-        var distMin = 0x7FFFFFFF
+        /*var distMin = 0x7FFFFFFF
         var lum = Luminosity(divSize, { 0 }) // initial lum
         var dist: Int
         var otherLum: Luminosity
@@ -356,7 +361,8 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
             }
         }
 
-        return lum
+        return lum*/
+        return brightnessKDTree.getNearestNeighbour(inputLum)
     }
 
     private fun findNearest(lum: Int): Int {

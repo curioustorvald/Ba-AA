@@ -133,9 +133,7 @@ class FrameRecordPreloader(file: File) : FrameFetcher {
      * Still have to read from head to tail
      */
     fun InputStream.readRelative(b: ByteArray, off: Int, len: Int): Int {
-        if (b == null) {
-            throw NullPointerException()
-        } else if (off < 0 || len < 0 || len > b.size) {
+        if (off < 0 || len < 0 || len > b.size) {
             throw IndexOutOfBoundsException()
         } else if (len == 0) {
             return 0
