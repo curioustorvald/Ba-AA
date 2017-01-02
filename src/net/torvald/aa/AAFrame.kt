@@ -2,8 +2,8 @@ package net.torvald.aa
 
 import net.torvald.aa.demoplayer.toUint
 import org.newdawn.slick.*
+import java.util.*
 
-import java.util.Random
 
 /**
  * Created by minjaesong on 16-08-10.

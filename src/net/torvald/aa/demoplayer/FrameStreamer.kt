@@ -1,9 +1,9 @@
 package net.torvald.aa.demoplayer
 
 import net.torvald.aa.AAFrame
-import net.torvald.aa.ImageToAA
 import org.newdawn.slick.Image
 import java.io.File
+
 
 /**
  * Created by minjaesong on 16-08-11.

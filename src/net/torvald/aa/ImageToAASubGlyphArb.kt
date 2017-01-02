@@ -346,15 +346,14 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
      */
     private fun findNearestLum(inputLum: Luminosity): Luminosity {
         // find closest: "Closest pair of points problem"
-        // TODO better algorithm
-        // brute force
+        // linear search
         /*var distMin = 0x7FFFFFFF
         var lum = Luminosity(divSize, { 0 }) // initial lum
         var dist: Int
         var otherLum: Luminosity
         for (i in 0..lumMap.size - 1) {
             otherLum = lumMap[i]
-            dist = otherLum.getDistSqr(inputLum)
+            dist = otherLum.distSqr(inputLum)
             if (dist < distMin) {
                 distMin = dist
                 lum = otherLum // redefine lum to currently nearest
@@ -362,8 +361,12 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         }
 
         return lum*/
-        return brightnessKDTree.getNearestNeighbour(inputLum)
+
+        // KD tree
+        return brightnessKDTree.findNearest(inputLum)
     }
+
+    private val zeroLum = Luminosity(divSize, { 0 })
 
     private fun findNearest(lum: Int): Int {
         val interval = binarySearchInterval(lumMapAll, lum)
@@ -442,12 +445,11 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
             )
 }
 
-class Luminosity(size: Int, init: (Int) -> Int): Comparable<Luminosity> {
-    private var luminosity: Array<Int> = Array<Int>(size, init)// = lum.toTypedArray()
+class Luminosity(val size: Int, init: (Int) -> Int): Comparable<Luminosity> {
+    private var luminosity: IntArray = IntArray(size, init)// = lum.toTypedArray()
     //constructor(size: Int, init: (Int) -> Int): this() { luminosity = Array<Int>(size, init) }
     operator fun get(i: Int) = luminosity[i]
     operator fun set(x: Int, value: Int) { luminosity[x] = value }
-    val size: Int get() = luminosity.size
     fun contains(element: Int) = luminosity.contains(element)
     fun forEach(action: (Int) -> Unit) = luminosity.forEach(action)
     fun forEachIndexed(action: (Int, Int) -> Unit) = luminosity.forEachIndexed(action)
@@ -480,10 +482,11 @@ class Luminosity(size: Int, init: (Int) -> Int): Comparable<Luminosity> {
     /**
      * (euclidean norm on 2D) ^ 2
      */
-    fun getDistSqr(other: Luminosity): Int {
+    fun distSqr(other: Luminosity): Int {
         var dist = 0
         for (i in 0..luminosity.size - 1)
             dist += (luminosity[i] - other.luminosity[i]) * (luminosity[i] - other.luminosity[i])
         return dist
     }
+
 }

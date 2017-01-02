@@ -6,15 +6,11 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.imageout.ImageOut;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
+
 
 /**
  * Crudely-written Ascii Art video player for Bad Apple
@@ -193,8 +189,8 @@ public class BaAA extends BasicGame {
                         ditherAlgo, fullCodePage, colourAlgo);
             }
             else if (algorithm == 1) {
-                imageToAA = new ImageToAASubGlyph4();
-                ((ImageToAASubGlyph4) imageToAA).setProp(w, h, fontSheet, fontW, fontH, inverted, gamma,
+                imageToAA = new ImageToAASubGlyphArb(2, 2);
+                ((ImageToAASubGlyphArb) imageToAA).setProp(w, h, fontSheet, fontW, fontH, inverted, gamma,
                         ditherAlgo, fullCodePage, colourAlgo);
             }
             else if (algorithm == 2) {

@@ -1,11 +1,7 @@
 package net.torvald.aa
 
 import net.torvald.aa.demoplayer.BaAA
-import org.lwjgl.opengl.GL11
-import org.newdawn.slick.Color
-import org.newdawn.slick.Font
-import org.newdawn.slick.Image
-import org.newdawn.slick.SpriteSheet
+import org.newdawn.slick.*
 import java.util.*
 
 /**

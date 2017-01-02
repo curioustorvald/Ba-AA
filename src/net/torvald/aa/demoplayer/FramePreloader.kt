@@ -1,10 +1,10 @@
 package net.torvald.aa.demoplayer
 
 import net.torvald.aa.AAFrame
-import net.torvald.aa.ImageToAA
 import org.newdawn.slick.Image
 import java.io.File
 import java.lang.management.ManagementFactory
+
 
 /**
  * Created by minjaesong on 16-08-11.
