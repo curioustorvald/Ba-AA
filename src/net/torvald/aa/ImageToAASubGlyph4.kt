@@ -94,6 +94,8 @@ class ImageToAASubGlyph4 : AsciiAlgo {
     private val lumSortByDim = Array<ArrayList<Long>>(4, { ArrayList() }) // [position][luma-glyph pair], pos0: top-left, stores combined lum (aka glyph)
     private val lumSortByDimElem = Array<ArrayList<Int>>(4, { ArrayList() }) // [position][luma-glyph pair], pos0: top-left, stores lum for each dimension
 
+    private lateinit var brightnessKDTree: KDHeapifiedTreeLong
+
     private lateinit var imageBuffer: Image
 
     private var precalcDone = false
@@ -275,14 +277,12 @@ class ImageToAASubGlyph4 : AsciiAlgo {
                 }
             }
 
+            // build k-d tree
+            brightnessKDTree = KDHeapifiedTreeLong(brightnessMap, 4)
+
             precalcDone = true
         }
     }
-
-    private fun Long.getTopLeft() = this.ushr(48).toInt() and 0xFFFF
-    private fun Long.getTopRight() = this.ushr(32).toInt() and 0xFFFF
-    private fun Long.getBottomLeft() = this.ushr(16).toInt() and 0xFFFF
-    private fun Long.getBottomRight() = this.toInt() and 0xFFFF
 
     lateinit var ditherBuffer: Array<IntArray>
 
@@ -407,41 +407,12 @@ class ImageToAASubGlyph4 : AsciiAlgo {
      * @return indexed lum 0..fontLumMax
      */
     private fun findNearestLum(lumTopLeft: Int, lumTopRight: Int, lumBottomLeft: Int, lumBottomRight: Int): Long {
-        // find closest: "Closest pair of points problem"
-        // TODO better algorithm
-        // brute force
-        // for some reason, lambda expression is actually slower
-        var distMin = 0x7FFFFFFF
-        var lum = 0L
-        var dist: Int = 0
-        var otherLum: Long
-
-        val lumPacked = lumTopLeft.and(0xFFFF).shl(48) +
+        val lumPacked: Long = lumTopLeft.and(0xFFFF).toLong().shl(48) +
                 lumTopRight.and(0xFFFF).shl(32) +
                 lumBottomLeft.and(0xFFFF).shl(16) +
                 lumBottomRight.and(0xFFFF)
 
-        //println("Lum: $lumTopLeft+$lumTopRight+$lumBottomLeft+$lumBottomRight")
-
-        //println("$argMin, $argMax")
-
-        for (cnt in 0..lumMap.size - 1) {
-            otherLum = lumMap[cnt]
-            dist = // euclidean norm on 2D, squared
-                    (lumTopLeft     - otherLum.getTopLeft()    ) * (lumTopLeft     - otherLum.getTopLeft()    ) +
-                    (lumTopRight    - otherLum.getTopRight()   ) * (lumTopRight    - otherLum.getTopRight()   ) +
-                    (lumBottomLeft  - otherLum.getBottomLeft() ) * (lumBottomLeft  - otherLum.getBottomLeft() ) +
-                    (lumBottomRight - otherLum.getBottomRight()) * (lumBottomRight - otherLum.getBottomRight())
-
-            //println("dist: $dist")
-
-            if (dist < distMin) {
-                distMin = dist
-                lum = otherLum
-            }
-        }
-
-        return lum
+        return brightnessKDTree.findNearest(lumPacked)
     }
 
     private val POS_TL = 0
@@ -536,3 +507,8 @@ class ImageToAASubGlyph4 : AsciiAlgo {
 }
 
 fun ensureBoundary(size: Int, index: Int) = if (index >= size) size - 1 else if (index < 0) 0 else index
+
+fun Long.getTopLeft() = this.ushr(48).toInt() and 0xFFFF
+fun Long.getTopRight() = this.ushr(32).toInt() and 0xFFFF
+fun Long.getBottomLeft() = this.ushr(16).toInt() and 0xFFFF
+fun Long.getBottomRight() = this.toInt() and 0xFFFF

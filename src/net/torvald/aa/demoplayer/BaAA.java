@@ -60,6 +60,7 @@ public class BaAA extends BasicGame {
     private boolean recordMode;
     private boolean replayMode = false;
     private String replayFileRef;
+    public static boolean noApproximate;
 
     private static Image screenBuffer;
     private static Graphics screenG;
@@ -138,6 +139,9 @@ public class BaAA extends BasicGame {
                 throw new IllegalStateException("Cannot record and play from the same file! " +
                                                         "Please check your configuration.");
             if (replayFileRef != null && replayFileRef.length() > 0) replayMode = true;
+
+            noApproximate = new Boolean(prop.getProperty("bNoApproximate"));
+                    // will default to false, as it's a nature of Boolean class
 
             String customCol = prop.getProperty("sCustomFilterColour");
             if (customCol == null || customCol.length() < 5) customCol = "255,79,0";
