@@ -221,7 +221,8 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
             }
 
             // build k-d tree
-            brightnessKDTree = KDHeapifiedTree(brightnessMap, divSize, BaAA.noApproximate, lumMax)
+            brightnessKDTree = KDHeapifiedTree(brightnessMap, divSize, BaAA.noApproximate,
+                    lumMax, BaAA.maxSearchDepth)
 
             //sameLumStartIndices.forEach { luminosity, i -> println("$luminosity, starts from $i") }
             //sameLumEndIndices.forEach { luminosity, i -> println("$luminosity, ends at $i") }

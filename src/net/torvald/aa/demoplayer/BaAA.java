@@ -61,6 +61,7 @@ public class BaAA extends BasicGame {
     private boolean replayMode = false;
     private String replayFileRef;
     public static boolean noApproximate;
+    public static Integer maxSearchDepth; // nullable
 
     private static Image screenBuffer;
     private static Graphics screenG;
@@ -142,6 +143,8 @@ public class BaAA extends BasicGame {
 
             noApproximate = new Boolean(prop.getProperty("bNoApproximate"));
                     // will default to false, as it's a nature of Boolean class
+            try { maxSearchDepth = new Integer(prop.getProperty("iMaxSearchDepth")); }
+            catch (NumberFormatException e) { maxSearchDepth = null; }
 
             String customCol = prop.getProperty("sCustomFilterColour");
             if (customCol == null || customCol.length() < 5) customCol = "255,79,0";

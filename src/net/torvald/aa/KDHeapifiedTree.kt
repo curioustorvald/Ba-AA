@@ -17,7 +17,7 @@ import java.util.*
  */
 class KDHeapifiedTree(
         points: List<Pair<Luminosity, Char>>, val dimension: Int, val noApproximate: Boolean,
-        maxPossibleLum: Int) {
+        maxPossibleLum: Int, customMaxDepth: Int?) {
 
     private val nodes = Array<Luminosity?>(points.size * 4, { null })
 
@@ -39,7 +39,7 @@ class KDHeapifiedTree(
     private fun Int.setRightChild(value: Luminosity?) { nodes[this.getRight()] = value }
 
     /** used to approximate the solution (doesn't go deeper than 8 -- 9 steps) */
-    private val maxSearchDepth =
+    private val maxSearchDepth = customMaxDepth ?:
             if (noApproximate) intLog2(points.size)
             else               Math.round(intLog2(points.size).times(0.75)).toInt()
     private val roundToBlackDist = 24
@@ -48,7 +48,7 @@ class KDHeapifiedTree(
     private val realWhiteLum: Luminosity
 
     init {
-        println("Approximated calculation: ${!noApproximate}")
+        println("Approximated calculation: ${if (customMaxDepth != null) "no idea" else !noApproximate}")
         println("Max recursion depth: $maxSearchDepth")
         create(points, 0, 0)
         realWhiteLum = getNearest(root, Luminosity(dimension, { maxPossibleLum }), 0, intLog2(points.size)).get()!!
