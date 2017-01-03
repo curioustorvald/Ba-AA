@@ -5,7 +5,7 @@
 
 ## About ##
 
-This is yet another crudely-written ascii-art generator and demo player that is highly configurable. Default setting of this demo emulates EGA text mode, with four shades of black/white, and a Sound Blaster.
+This is yet another ascii-art generator and demo player that is highly configurable. Default setting of this demo emulates EGA text mode, with four shades of grey, and a Sound Blaster.
 
 The video playback can be scaled to any console text mode size, can support any video framerate and any length.
 
@@ -14,8 +14,6 @@ You can alter the font set to whatever you want, the AA engine will adjust itsel
 You can also make this demo to play completely different video and audio. Please refer to the ```config.properties``` file.
 
 The demo is distributed under the MIT License. Please refer to ```COPYING``` for the copy of the license.
-
-One last note: don’t expect much about the performance, and don’t try to find out what “BA” means.
 
 
 ## How to run ##
@@ -93,6 +91,8 @@ The library receives current font (as a SpriteSheet), apply colours, then calcul
 The object must be initialised with ```setProp()``` function before use, and ```precalcFont()``` must be called before you can actually play with ```toAscii()```.
 
 The library supports Gamma Correction, but not the inverted mode (white background, black text)
+
+In default setting, the library returns approximated solution (good enough answer, not exact). You can force it to return exact solution by ```bNoApproximate=true``` in config.
 
 
 ## Trivia ##
