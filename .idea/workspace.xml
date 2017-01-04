@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="BadAppleAA:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="46feafdd-d9b6-4919-87eb-8d64976b5614" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jinput.jar" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/BadAppleAA_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/BadAppleAA_jar.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.properties" afterPath="$PROJECT_DIR$/config.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config_default.properties" afterPath="$PROJECT_DIR$/config_default.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyph4.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyph4.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTreeLong.kt" afterPath="$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTreeLong.kt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java" afterPath="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java" />
     </list>
     <ignored path="$PROJECT_DIR$/assets/" />
     <ignored path="$PROJECT_DIR$/framerec/" />
@@ -43,7 +45,7 @@
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="401">
-                  <caret line="45" column="39" lean-forward="true" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
+                  <caret line="45" column="39" lean-forward="false" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
                   <folding />
                 </state>
               </provider>
@@ -64,10 +66,10 @@
           <file leaf-file-name="ImageToAASubGlyphArb.kt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="336">
-                  <caret line="427" column="13" lean-forward="false" selection-start-line="427" selection-start-column="13" selection-end-line="427" selection-end-column="13" />
+                <state relative-caret-position="378">
+                  <caret line="27" column="31" lean-forward="true" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
                   <folding>
-                    <element signature="e#24#161#0" expanded="true" />
+                    <element signature="e#24#107#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -81,9 +83,9 @@
             <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="187">
-                  <caret line="247" column="28" lean-forward="false" selection-start-line="247" selection-start-column="28" selection-end-line="247" selection-end-column="28" />
+                  <caret line="246" column="28" lean-forward="false" selection-start-line="246" selection-start-column="28" selection-end-line="246" selection-end-column="28" />
                   <folding>
-                    <element signature="e#24#161#0" expanded="true" />
+                    <element signature="e#24#107#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -222,9 +224,9 @@
         <option value="$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTreeLong.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyph4.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/terrarum/concurrent/ThreadParallel.kt" />
-        <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" />
         <option value="$PROJECT_DIR$/src/net/torvald/aa/demoplayer/BaAA.java" />
         <option value="$PROJECT_DIR$/config.properties" />
+        <option value="$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt" />
       </list>
     </option>
   </component>
@@ -279,10 +281,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="torvald" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="concurrent" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -347,6 +345,10 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="META-INF" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -355,6 +357,9 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/SKYHi14/Documents/Ba-AA/src/net/torvald/aa/ImageToAASubGlyphArb.kt" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.32068965" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -623,7 +628,7 @@
         <state relative-caret-position="3122">
           <caret line="223" column="45" lean-forward="true" selection-start-line="223" selection-start-column="45" selection-end-line="223" selection-end-column="45" />
           <folding>
-            <element signature="e#24#161#0" expanded="true" />
+            <element signature="e#24#107#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -837,7 +842,7 @@
     <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/KDHeapifiedTree.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401">
-          <caret line="45" column="39" lean-forward="true" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
+          <caret line="45" column="39" lean-forward="false" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
           <folding />
         </state>
       </provider>
@@ -892,15 +897,101 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/torvald/aa/ImageToAASubGlyphArb.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="427" column="13" lean-forward="false" selection-start-line="427" selection-start-column="13" selection-end-line="427" selection-end-column="13" />
+        <state relative-caret-position="378">
+          <caret line="27" column="31" lean-forward="true" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
           <folding>
-            <element signature="e#24#161#0" expanded="true" />
+            <element signature="e#24#107#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>BadAppleAA:jar</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.32068965" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Kotlin</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.32068965" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>BaAA</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>lib</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.32068965" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

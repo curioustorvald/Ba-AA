@@ -6,42 +6,19 @@
         <element id="module-output" name="BaAA" />
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/src/ABOUT.md" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/COPYING" />
       <element id="file-copy" path="$PROJECT_DIR$/config.properties" />
       <element id="file-copy" path="$PROJECT_DIR$/config_default.properties" />
+      <element id="file-copy" path="$PROJECT_DIR$/COPYING" />
       <element id="directory" name="lib">
-        <element id="library" level="project" name="lib" />
-        <element id="library" level="project" name="KotlinJavaRuntime" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/ibxm.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jinput-dx8.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jinput-dx8_64.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jinput-raw.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jinput-raw_64.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jinput.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jogg-0.0.7.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/jorbis-0.0.15.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-reflect.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-runtime-sources.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/kotlin-runtime.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/libjinput-linux.so" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/libjinput-linux64.so" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/libjinput-osx.dylib" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/liblwjgl.dylib" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/liblwjgl.so" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/liblwjgl64.so" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/libopenal.so" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/libopenal64.so" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/lwjgl.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/lwjgl.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/lwjgl64.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/lwjgl_util.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/natives-linux.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/natives-mac.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/natives-windows.jar" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/openal.dylib" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/OpenAL32.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/OpenAL64.dll" />
-        <element id="file-copy" path="$PROJECT_DIR$/lib/slick.jar" />
+        <element id="dir-copy" path="$PROJECT_DIR$/lib" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/jinput-dx8.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/jinput-dx8_64.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/jinput-raw.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/jinput-raw_64.dll" />
+      <element id="file-copy" path="$PROJECT_DIR$/jinput.jar" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
     </root>
   </artifact>

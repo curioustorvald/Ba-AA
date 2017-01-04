@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Class-Path: lib/ibxm.jar lib/lwjgl.jar lib/slick.jar lib/jinput.jar
- lib/jogg-0.0.7.jar lib/lwjgl_util.jar lib/jorbis-0.0.15.jar lib/ko
- tlin-reflect.jar lib/kotlin-runtime.jar
+Class-Path: lib/ibxm.jar lib/lwjgl.jar lib/slick.jar lib/jogg-0.0.7.ja
+ r lib/lwjgl_util.jar lib/jorbis-0.0.15.jar lib/kotlin-reflect.jar lib
+ /kotlin-runtime.jar lib/jinput.jar
 Main-Class: net.torvald.aa.demoplayer.BaAA
 

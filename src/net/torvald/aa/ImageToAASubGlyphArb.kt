@@ -1,7 +1,6 @@
 package net.torvald.aa
 
 import net.torvald.aa.demoplayer.BaAA
-import net.torvald.terrarum.concurrent.ThreadParallel
 import org.newdawn.slick.*
 import java.util.*
 
