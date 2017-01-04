@@ -63,6 +63,8 @@ public class BaAA extends BasicGame {
     public static boolean noApproximate;
     public static Integer maxSearchDepth; // nullable
 
+    public static int systemThreads = Runtime.getRuntime().availableProcessors();
+
     private static Image screenBuffer;
     private static Graphics screenG;
 
@@ -143,7 +145,7 @@ public class BaAA extends BasicGame {
 
             noApproximate = new Boolean(prop.getProperty("bNoApproximate"));
                     // will default to false, as it's a nature of Boolean class
-            try { maxSearchDepth = new Integer(prop.getProperty("iMaxSearchDepth")); }
+            try { maxSearchDepth = new Integer(prop.getProperty("iRenderAcuracy")); }
             catch (NumberFormatException e) { maxSearchDepth = null; }
 
             String customCol = prop.getProperty("sCustomFilterColour");

@@ -1,6 +1,7 @@
 package net.torvald.aa
 
 import net.torvald.aa.demoplayer.BaAA
+import net.torvald.terrarum.concurrent.ThreadParallel
 import org.newdawn.slick.*
 import java.util.*
 
@@ -18,17 +19,17 @@ import java.util.*
  */
 class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
 
-    private var w = 0
-    private var h = 0
+    internal var w = 0
+    internal var h = 0
     private lateinit var fontSheet: SpriteSheet
     override var fontW = 0
     override var fontH = 0
     private var inverted = false
     private var gamma = 0.0
-    private var ditherAlgo = 0
+    internal var ditherAlgo = 0
     private var colourAlgo = 0
 
-    private val divSize = divW * divH
+    internal val divSize = divW * divH
 
     private lateinit var fontRange: IntRange
 
@@ -97,7 +98,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
 
     private lateinit var brightnessKDTree: KDHeapifiedTree
 
-    private lateinit var imageBuffer: Image
+    internal lateinit var imageBuffer: Image
 
     private var precalcDone = false
 
@@ -237,11 +238,12 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     val SIERRA_LITE = 2
     val SIERRA_2 = 3
 
+    fun Float.roundInt(): Int = Math.round(this)
+
     override fun toAscii(rawImage: Image, aaframe: AAFrame) {
         // draw scale-flagged (getScaledCopy) image to the buffer
         imageBuffer.graphics.drawImage(rawImage.getScaledCopy(w, h), 0f, 0f)
 
-        // fill buffer (scan size: W*H of aaframe)
         for (y in 0..h - 1 step divH) {
             for (x in 0..w - 1 step divW) {
                 if (ditherAlgo == 0) {
@@ -345,29 +347,9 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
      * @param fontLum : int ranged 0..fontLumMax
      * @return indexed lum 0..fontLumMax
      */
-    private fun findNearestLum(inputLum: Luminosity): Luminosity {
-        // find closest: "Closest pair of points problem"
-        // linear search
-        /*var distMin = 0x7FFFFFFF
-        var lum = Luminosity(divSize, { 0 }) // initial lum
-        var dist: Int
-        var otherLum: Luminosity
-        for (i in 0..lumMap.size - 1) {
-            otherLum = lumMap[i]
-            dist = otherLum.distSqr(inputLum)
-            if (dist < distMin) {
-                distMin = dist
-                lum = otherLum // redefine lum to currently nearest
-            }
-        }
-
-        return lum*/
-
-        // KD tree
+    internal fun findNearestLum(inputLum: Luminosity): Luminosity {
         return brightnessKDTree.findNearest(inputLum)
     }
-
-    private val zeroLum = Luminosity(divSize, { 0 })
 
     private fun findNearest(lum: Int): Int {
         val interval = binarySearchInterval(lumMapAll, lum)
@@ -423,7 +405,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         return Pair(Math.max(high, 0), Math.min(low, list.size - 1))
     }
 
-    private fun pickRandomGlyphByLumNoQnt(fontLum: Luminosity): Char {
+    internal fun pickRandomGlyphByLumNoQnt(fontLum: Luminosity): Char {
         if (fontLum.isZero() && !inverted)
             return 0x20.toChar() // ' ' with colour index 'zero'
 

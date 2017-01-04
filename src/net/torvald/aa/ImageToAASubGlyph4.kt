@@ -15,6 +15,9 @@ import java.util.*
  * Scan each glyph on the spritesheet provided, divide the single glyph into 2x2 and calculate the luminosity.
  *
  * Created by minjaesong on 16-08-10.
+ *
+ *
+ * FIXME: lots of 'q's artefact
  */
 class ImageToAASubGlyph4 : AsciiAlgo {
 
@@ -105,7 +108,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
 
     private val exclude = arrayOf(
             '_'.getAscii(),
-            '-'.getAscii(),
+            //'-'.getAscii(), // TODO remove?
             '|'.getAscii(),
             8, 9, 10
     )
@@ -278,7 +281,8 @@ class ImageToAASubGlyph4 : AsciiAlgo {
             }
 
             // build k-d tree
-            brightnessKDTree = KDHeapifiedTreeLong(brightnessMap, 4)
+            brightnessKDTree = KDHeapifiedTreeLong(brightnessMap, 4, BaAA.noApproximate,
+                    lumMax, BaAA.maxSearchDepth)
 
             precalcDone = true
         }
@@ -408,9 +412,9 @@ class ImageToAASubGlyph4 : AsciiAlgo {
      */
     private fun findNearestLum(lumTopLeft: Int, lumTopRight: Int, lumBottomLeft: Int, lumBottomRight: Int): Long {
         val lumPacked: Long = lumTopLeft.and(0xFFFF).toLong().shl(48) +
-                lumTopRight.and(0xFFFF).shl(32) +
-                lumBottomLeft.and(0xFFFF).shl(16) +
-                lumBottomRight.and(0xFFFF)
+                lumTopRight.and(0xFFFF).toLong().shl(32) +
+                lumBottomLeft.and(0xFFFF).toLong().shl(16) +
+                lumBottomRight.and(0xFFFF).toLong()
 
         return brightnessKDTree.findNearest(lumPacked)
     }
@@ -479,7 +483,7 @@ class ImageToAASubGlyph4 : AsciiAlgo {
         if (fontLum == 0L && !inverted)
             return 0x20.toChar() // ' ' with colour index 'zero'
 
-        val indexStart = sameLumStartIndices[fontLum]
+        /*val indexStart = sameLumStartIndices[fontLum]
         val indexEnd   = sameLumEndIndices[fontLum]
 
         if (indexStart == null && indexEnd == null)
@@ -498,7 +502,12 @@ class ImageToAASubGlyph4 : AsciiAlgo {
             return brightnessMap[index].second
         }
 
-        throw NullPointerException()
+        throw NullPointerException()*/
+        val indexStart = sameLumStartIndices[fontLum]!!
+        val indexEnd   = sameLumEndIndices[fontLum]!!
+
+        val index = Random().nextInt(indexEnd - indexStart + 1) + indexStart
+        return brightnessMap[index].second
     }
     fun Char.getColourKey() = this.toInt().ushr(8).and(0x1F)
     fun Char.getAscii() = this.toInt().and(0xFF)

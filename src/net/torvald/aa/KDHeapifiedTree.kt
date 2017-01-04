@@ -42,8 +42,10 @@ class KDHeapifiedTree(
     private val maxSearchDepth = customMaxDepth ?:
             if (noApproximate) intLog2(points.size)
             else               Math.round(intLog2(points.size).times(0.75)).toInt()
-    private val roundToBlackDist = 24
-    private val roundToWhiteDist = 16
+    companion object {
+        const val roundToBlackDist = 24
+        const val roundToWhiteDist = 16
+    }
     private val zeroLum = Luminosity(dimension, { 0 })
     private val realWhiteLum: Luminosity
 
@@ -101,9 +103,11 @@ class KDHeapifiedTree(
         return best // work back up
     }
 
-    fun Int.compare(other: Luminosity, dimension: Int) = other[dimension] - this.get()!![dimension]
+    fun Int.compare(other: Luminosity, dimension: Int) =
+            other[dimension] - this.get()!![dimension]
 
-    private fun Luminosity.dimDistSqr(other: Luminosity, dimension: Int) = other[dimension].minus(this[dimension]).sqr()
+    private fun Luminosity.dimDistSqr(other: Luminosity, dimension: Int) =
+            other[dimension].minus(this[dimension]).sqr()
 }
 
 fun intLog2(number: Int): Int {
