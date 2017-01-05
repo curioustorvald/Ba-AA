@@ -19,7 +19,7 @@ class KDHeapifiedTree(
         points: List<Pair<Luminosity, Char>>, val dimension: Int, val noApproximate: Boolean,
         maxPossibleLum: Int, customMaxDepth: Int?) {
 
-    private val nodes = Array<Luminosity?>(points.size * 4, { null })
+    private val nodes = Array<Luminosity?>(nextPowerOfTwo(points.size).shl(1), { null })
 
     private val root: Int = 0
 
@@ -131,4 +131,16 @@ fun intLog2(number: Int): Int {
         log += 2
     }
     return log + number.ushr(1)
+}
+
+fun nextPowerOfTwo(number: Int): Int {
+    var number = number - 1
+    number = number or (number shr 1)
+    number = number or (number shr 2)
+    number = number or (number shr 4)
+    number = number or (number shr 8)
+    number = number or (number shr 16)
+    number++
+    number += if (number == 0) 1 else 0
+    return number
 }
