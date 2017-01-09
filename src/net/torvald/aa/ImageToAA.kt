@@ -414,3 +414,21 @@ fun Color.getLuminance(colourAlgo: Int, gamma: Double): Double =
                 Math.pow((3 * r + b + 4 * g) / 8.0, gamma)
             else
                 throw IllegalArgumentException("Unknown luminance algorithm: $colourAlgo")
+
+fun getLuminance(redByte: Int, greenByte: Int, blueByte: Int, colourAlgo: Int, gamma: Double): Double {
+    val r = redByte / 255f
+    val g = greenByte / 255f
+    val b = blueByte / 255f
+
+    return if (redByte > 0xF8 && greenByte >= 0xF8 && blueByte >= 0xF8) // mask irregularity in white colour
+        1.0
+    else if (redByte < 0x8 && greenByte < 0x8 && blueByte < 0x8)
+        0.0
+    else
+        if (colourAlgo == 1)
+            (0.299 * r.sqr() + 0.587 * g.sqr() + 0.114 * b.sqr()).powerOf(0.5 * gamma)
+        else if (colourAlgo == 0)
+            Math.pow((3 * r + b + 4 * g) / 8.0, gamma)
+        else
+            throw IllegalArgumentException("Unknown luminance algorithm: $colourAlgo")
+}

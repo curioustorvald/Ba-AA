@@ -19,7 +19,11 @@ import java.util.*
  *
  * FIXME: lots of 'q's artefact
  */
-class ImageToAASubGlyph4 : AsciiAlgo {
+@Deprecated(
+        "I won't hack with this one; use ImageToAASubGlyphArb.",
+        ReplaceWith("net.torvald.aa.ImageToAASubGlyphArb"),
+        DeprecationLevel.WARNING
+) class ImageToAASubGlyph4 : AsciiAlgo {
 
     private var w = 0
     private var h = 0

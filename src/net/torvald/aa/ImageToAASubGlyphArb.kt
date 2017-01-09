@@ -1,6 +1,7 @@
 package net.torvald.aa
 
 import net.torvald.aa.demoplayer.BaAA
+import net.torvald.aa.demoplayer.toUint
 import org.newdawn.slick.*
 import java.util.*
 
@@ -53,7 +54,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         else
             fontRange = 32..126
 
-        imageBuffer = Image(w, h)
+        pixelDataBufferFrameBuffer = Image(w, h)
 
         // re-invert colourmap so that the calculation stay normal when inverted
         colourMap = Array<Double>(BaAA.colors.size, { 0.0 })
@@ -97,7 +98,8 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
 
     private lateinit var brightnessKDTree: KDHeapifiedTree
 
-    internal lateinit var imageBuffer: Image
+    internal lateinit var pixelDataBufferFrameBuffer: Image
+    internal lateinit var pixelDataBuffer: ByteArray
 
     private var precalcDone = false
 
@@ -116,6 +118,9 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     private var totalGlyphCount = 0
 
     override fun precalcFont() {
+        // NOTE: diabolical "getColor()" is used, but it's a loading stage and it's not that long
+        //       so I'll just leave it.
+
         if (!precalcDone) {
 
             val fontSheetW = fontSheet.width / fontW
@@ -241,7 +246,9 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
 
     override fun toAscii(rawImage: Image, aaframe: AAFrame) {
         // draw scale-flagged (getScaledCopy) image to the buffer
-        imageBuffer.graphics.drawImage(rawImage.getScaledCopy(w, h), 0f, 0f)
+        // so that the image is actually resized
+        pixelDataBufferFrameBuffer.graphics.drawImage(rawImage.getScaledCopy(w, h), 0f, 0f)
+        pixelDataBuffer = pixelDataBufferFrameBuffer.texture.textureData // yes, we're going into the texture
 
         for (y in 0..h - 1 step divH) {
             for (x in 0..w - 1 step divW) {
@@ -320,7 +327,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         }
 
         // clear buffer
-        imageBuffer.graphics.flush()
+        pixelDataBufferFrameBuffer.graphics.flush()
     }
 
     fun Array<IntArray>.set(x: Int, y: Int, value: Int) {
@@ -335,11 +342,27 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     }
 
     fun bufferPixelFontLum(x: Int, y: Int): Int {
+        val pixel = getPixelFromTexture(x, y)
         val lum = // [0.0 - 1.0]
-                imageBuffer.getColor(x, y).getLuminance(colourAlgo, gamma)
+                net.torvald.aa.getLuminance(
+                        pixel[0].toUint(), pixel[1].toUint(), pixel[2].toUint(),
+                        colourAlgo, gamma
+                )
 
         val delta = lumMax - lumMin
         return (lumMin + delta * lum).roundInt()
+    }
+
+    fun getPixelFromTexture(x: Int, y: Int): ByteArray {
+        val textureWidth = nextPowerOfTwo(w) // slick2d's behaviour
+
+        val oneDimPos = 4 * (textureWidth * y + x) // 4: # of channels (RGBA)
+
+        return byteArrayOf(
+                pixelDataBuffer[oneDimPos],
+                pixelDataBuffer[oneDimPos + 1],
+                pixelDataBuffer[oneDimPos + 2]
+        )
     }
 
     /**
