@@ -2,6 +2,7 @@ package net.torvald.aa.demoplayer;
 
 
 import net.torvald.aa.*;
+import net.torvald.terrarum.concurrent.ThreadParallel;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.imageout.ImageOut;
@@ -62,7 +63,7 @@ public class BaAA extends BasicGame {
     private String replayFileRef;
     public static boolean noApproximate;
     public static Integer maxSearchDepth; // nullable
-
+    public static boolean multithread;
     public static int systemThreads = Runtime.getRuntime().availableProcessors();
 
     private static Image screenBuffer;
@@ -131,7 +132,8 @@ public class BaAA extends BasicGame {
             testImageRef = prop.getProperty("sTestDisplayImage");
             singleColour = new Boolean(prop.getProperty("bSingleTone"));
             fullCodePage = new Boolean(prop.getProperty("bFullCodePage"));
-            algorithm = new Integer(prop.getProperty("iAsciiAlgo"));
+            try { algorithm = new Integer(prop.getProperty("iAsciiAlgo")); }
+            catch (NumberFormatException e) { algorithm = 1; }
             monitorCol = new Integer(prop.getProperty("iMonitorType"));
             showCredit = new Boolean(prop.getProperty("bDemoCredit"));
             colourAlgo = new Integer(prop.getProperty("iColourMode"));
@@ -147,6 +149,8 @@ public class BaAA extends BasicGame {
                     // will default to false, as it's a nature of Boolean class
             try { maxSearchDepth = new Integer(prop.getProperty("iRenderAcuracy")); }
             catch (NumberFormatException e) { maxSearchDepth = null; }
+
+            multithread = new Boolean(prop.getProperty("bMultithread")) && systemThreads >= 2;
 
             String customCol = prop.getProperty("sCustomFilterColour");
             if (customCol == null || customCol.length() < 5) customCol = "255,79,0";
@@ -308,6 +312,7 @@ public class BaAA extends BasicGame {
                                                 : String.valueOf(((FrameRecordPreloader) frameLoader).getNColour()))
                     + " — A: " + ((!replayMode) ? String.valueOf(algorithm) + String.valueOf(ditherAlgo)
                                                 : String.valueOf(((FrameRecordPreloader) frameLoader).getNAlgo()))
+                    + " — MT: " + ((multithread) ? String.valueOf(systemThreads) : "No")
             );
 
             if (frameCount >= frameLoader.getFrameCount() - 1 && testImage == null)

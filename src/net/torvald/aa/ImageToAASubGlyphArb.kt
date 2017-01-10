@@ -2,8 +2,10 @@ package net.torvald.aa
 
 import net.torvald.aa.demoplayer.BaAA
 import net.torvald.aa.demoplayer.toUint
+import net.torvald.terrarum.concurrent.ThreadParallel
 import org.newdawn.slick.*
 import java.util.*
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 /**
  * Generalised version of ImageToAASubGlyph4
@@ -125,9 +127,11 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
 
             val fontSheetW = fontSheet.width / fontW
             val rangesX = Array(divW, {
-                getStartAndEndInclusivePoints(fontW, divW, it) })
+                getStartAndEndInclusivePoints(fontW, divW, it)
+            })
             val rangesY = Array(divH, {
-                getStartAndEndInclusivePoints(fontH, divH, it) })
+                getStartAndEndInclusivePoints(fontH, divH, it)
+            })
 
 
             rangesX.forEach { println("range x: $it") }
@@ -250,78 +254,96 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         pixelDataBufferFrameBuffer.graphics.drawImage(rawImage.getScaledCopy(w, h), 0f, 0f)
         pixelDataBuffer = pixelDataBufferFrameBuffer.texture.textureData // yes, we're going into the texture
 
-        for (y in 0..h - 1 step divH) {
-            for (x in 0..w - 1 step divW) {
-                if (ditherAlgo == 0) {
-                    val lum = Luminosity(divSize, { bufferPixelFontLum(x + it % divW, y + it / divW) })
-                    val qntLum = findNearestLum(lum)
-                    //val qntLum = brightnessMap.last().first
-                    val char = pickRandomGlyphByLumNoQnt(qntLum)
-
-                    aaframe.drawBuffer(x / divW, y / divH, char)
-                }
-                else {
-                    for (ySub in 0..divH - 1)
-                        for (xSub in 0..divW - 1)
-                            ditherBuffer.set(x + xSub, y + ySub, bufferPixelFontLum(x + xSub, y + ySub))
-                }
+        if (BaAA.multithread) {
+            for (i in 0..BaAA.systemThreads - 1) {
+                ThreadParallel.map(
+                        i,
+                        ThreadToAscii(
+                                this,
+                                h.toFloat().div(BaAA.systemThreads).times(i).roundInt(),
+                                h.toFloat().div(BaAA.systemThreads).times(i.plus(1)).roundInt() - 1,
+                                aaframe
+                        ),
+                        "ToAscii"
+                )
             }
-        }
 
-        // dither
-        // ref: http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/
-        if (ditherAlgo > 0) {
-            // scan for ditherBuffer that is strecthed to Y
+            ThreadParallel.startAllWaitForDie()
+        }
+        else {
             for (y in 0..h - 1 step divH) {
                 for (x in 0..w - 1 step divW) {
-                    val oldPixel = ditherBuffer.get(x, y)
-                    val newPixel = findNearest(oldPixel)
+                    if (ditherAlgo == 0) {
+                        val lum = Luminosity(divSize, { bufferPixelFontLum(x + it % divW, y + it / divW) })
+                        val qntLum = findNearestLum(lum)
+                        //val qntLum = brightnessMap.last().first
+                        val char = pickRandomGlyphByLumNoQnt(qntLum)
 
-                    ditherBuffer.set(x, y, newPixel)
-
-                    val error = oldPixel - newPixel
-
-                    // dither glyph-wise rather than pixel-wise
-                    for (haxX in 0..divW - 1) {
-                        for (haxY in 0..divH - 1) {
-                            // floyd-steinberg
-                            if (ditherAlgo == FLOYD_STEINBERG) {
-                                ditherBuffer.set(x + 1 + haxX, y     + haxY, ditherBuffer.get(x + 1 + haxX, y     + haxY) + (error.times(7).shr(4)))
-                                ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(3).shr(4)))
-                                ditherBuffer.set(x     + haxX, y + 1 + haxY, ditherBuffer.get(x     + haxX, y + 1 + haxY) + (error.times(5).shr(4)))
-                                ditherBuffer.set(x + 1 + haxX, y + 1 + haxY, ditherBuffer.get(x + 1 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
-                            }
-                            // sierra lite
-                            else if (ditherAlgo == SIERRA_LITE) {
-                                ditherBuffer.set(x + 1 + haxX, y     + haxY, ditherBuffer.get(x + 1 + haxX, y     + haxY) + (error.times(2).shr(2)))
-                                ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(1).shr(2)))
-                                ditherBuffer.set(x     + haxX, y + 1 + haxY, ditherBuffer.get(x     + haxX, y + 1 + haxY) + (error.times(1).shr(2)))
-                            }
-                            // sierra-2
-                            else if (ditherAlgo == SIERRA_2) {
-                                ditherBuffer.set(x + 1 + haxX, y     + haxY, ditherBuffer.get(x + 1 + haxX, y     + haxY) + (error.times(4).shr(4)))
-                                ditherBuffer.set(x + 2 + haxX, y     + haxY, ditherBuffer.get(x + 2 + haxX, y     + haxY) + (error.times(3).shr(4)))
-                                ditherBuffer.set(x - 2 + haxX, y + 1 + haxY, ditherBuffer.get(x - 2 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
-                                ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(2).shr(4)))
-                                ditherBuffer.set(x     + haxX, y + 1 + haxY, ditherBuffer.get(x     + haxX, y + 1 + haxY) + (error.times(3).shr(4)))
-                                ditherBuffer.set(x + 1 + haxX, y + 1 + haxY, ditherBuffer.get(x + 1 + haxX, y + 1 + haxY) + (error.times(2).shr(4)))
-                                ditherBuffer.set(x + 2 + haxX, y + 1 + haxY, ditherBuffer.get(x + 2 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
-                            }
-                            else {
-                                throw IllegalArgumentException("Unknown dithering algorithm: $ditherAlgo")
-                            }
-                        }
+                        aaframe.drawBuffer(x / divW, y / divH, char)
+                    }
+                    else {
+                        for (ySub in 0..divH - 1)
+                            for (xSub in 0..divW - 1)
+                                ditherBuffer.set(x + xSub, y + ySub, bufferPixelFontLum(x + xSub, y + ySub))
                     }
                 }
             }
 
-            // ...and draw
-            for (y in 0..h - 1 step divH) {
-                for (x in 0..w - 1 step divW) {
-                    val lum = Luminosity(divSize, { bufferPixelFontLum(x + it % divW, y + it / divW) })
-                    val char = pickRandomGlyphByLumNoQnt(findNearestLum(lum))
+            // dither
+            // ref: http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/
+            if (ditherAlgo > 0) {
+                // scan for ditherBuffer that is strecthed to Y
+                for (y in 0..h - 1 step divH) {
+                    for (x in 0..w - 1 step divW) {
+                        val oldPixel = ditherBuffer.get(x, y)
+                        val newPixel = findNearest(oldPixel)
 
-                    aaframe.drawBuffer(x / divW, y / divH, char)
+                        ditherBuffer.set(x, y, newPixel)
+
+                        val error = oldPixel - newPixel
+
+                        // dither glyph-wise rather than pixel-wise
+                        for (haxX in 0..divW - 1) {
+                            for (haxY in 0..divH - 1) {
+                                // floyd-steinberg
+                                if (ditherAlgo == FLOYD_STEINBERG) {
+                                    ditherBuffer.set(x + 1 + haxX, y + haxY, ditherBuffer.get(x + 1 + haxX, y + haxY) + (error.times(7).shr(4)))
+                                    ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(3).shr(4)))
+                                    ditherBuffer.set(x + haxX, y + 1 + haxY, ditherBuffer.get(x + haxX, y + 1 + haxY) + (error.times(5).shr(4)))
+                                    ditherBuffer.set(x + 1 + haxX, y + 1 + haxY, ditherBuffer.get(x + 1 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
+                                }
+                                // sierra lite
+                                else if (ditherAlgo == SIERRA_LITE) {
+                                    ditherBuffer.set(x + 1 + haxX, y + haxY, ditherBuffer.get(x + 1 + haxX, y + haxY) + (error.times(2).shr(2)))
+                                    ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(1).shr(2)))
+                                    ditherBuffer.set(x + haxX, y + 1 + haxY, ditherBuffer.get(x + haxX, y + 1 + haxY) + (error.times(1).shr(2)))
+                                }
+                                // sierra-2
+                                else if (ditherAlgo == SIERRA_2) {
+                                    ditherBuffer.set(x + 1 + haxX, y + haxY, ditherBuffer.get(x + 1 + haxX, y + haxY) + (error.times(4).shr(4)))
+                                    ditherBuffer.set(x + 2 + haxX, y + haxY, ditherBuffer.get(x + 2 + haxX, y + haxY) + (error.times(3).shr(4)))
+                                    ditherBuffer.set(x - 2 + haxX, y + 1 + haxY, ditherBuffer.get(x - 2 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
+                                    ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(2).shr(4)))
+                                    ditherBuffer.set(x + haxX, y + 1 + haxY, ditherBuffer.get(x + haxX, y + 1 + haxY) + (error.times(3).shr(4)))
+                                    ditherBuffer.set(x + 1 + haxX, y + 1 + haxY, ditherBuffer.get(x + 1 + haxX, y + 1 + haxY) + (error.times(2).shr(4)))
+                                    ditherBuffer.set(x + 2 + haxX, y + 1 + haxY, ditherBuffer.get(x + 2 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
+                                }
+                                else {
+                                    throw IllegalArgumentException("Unknown dithering algorithm: $ditherAlgo")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ...and draw
+                for (y in 0..h - 1 step divH) {
+                    for (x in 0..w - 1 step divW) {
+                        val lum = Luminosity(divSize, { bufferPixelFontLum(x + it % divW, y + it / divW) })
+                        val char = pickRandomGlyphByLumNoQnt(findNearestLum(lum))
+
+                        aaframe.drawBuffer(x / divW, y / divH, char)
+                    }
                 }
             }
         }
@@ -329,6 +351,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         // clear buffer
         pixelDataBufferFrameBuffer.graphics.flush()
     }
+
 
     fun Array<IntArray>.set(x: Int, y: Int, value: Int) {
         if (x >= 0 && y >= 0 && x < w && y < h)
@@ -354,7 +377,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
     }
 
     fun getPixelFromTexture(x: Int, y: Int): ByteArray {
-        val textureWidth = nextPowerOfTwo(w) // slick2d's behaviour
+        val textureWidth = nextPowerOfTwo(w) // slick2d's internal behaviour
 
         val oneDimPos = 4 * (textureWidth * y + x) // 4: # of channels (RGBA)
 
@@ -373,7 +396,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         return brightnessKDTree.findNearest(inputLum)
     }
 
-    private fun findNearest(lum: Int): Int {
+    internal fun findNearest(lum: Int): Int {
         val interval = binarySearchInterval(lumMapAll, lum)
 
         if (interval.first == interval.second)
@@ -434,7 +457,7 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
         //println("Errenous call of $fontLum")
 
         val indexStart = sameLumStartIndices[fontLum]!!
-        val indexEnd   = sameLumEndIndices[fontLum]!!
+        val indexEnd = sameLumEndIndices[fontLum]!!
 
         val index = Random().nextInt(indexEnd - indexStart + 1) + indexStart
         return brightnessMap[index].second
@@ -448,6 +471,98 @@ class ImageToAASubGlyphArb(val divW: Int, val divH: Int) : AsciiAlgo {
                     ..
                     ((divideFrom.toDouble() / divideBy) * i.plus(1)).roundInt() - 1
             )
+
+    private class ThreadToAscii(val sup: ImageToAASubGlyphArb, val start: Int, val end: Int, val aaframe: AAFrame) : Runnable {
+        fun Array<IntArray>.set(x: Int, y: Int, value: Int) {
+            if (x >= 0 && y >= 0 && x < sup.w && y < sup.h)
+                this[y][x] = value
+        }
+
+        fun Array<IntArray>.get(x: Int, y: Int): Int {
+            if (x >= 0 && y >= 0 && x < sup.w && y < sup.h)
+                return this[y][x]
+            else return 0
+        }
+
+        override fun run() {
+            for (y in start..end step sup.divH) {
+                for (x in 0..sup.w - 1 step sup.divW) {
+                    if (sup.ditherAlgo == 0) {
+                        val lum = Luminosity(sup.divSize, { sup.bufferPixelFontLum(x + it % sup.divW, y + it / sup.divW) })
+                        val qntLum = sup.findNearestLum(lum)
+                        //val qntLum = brightnessMap.last().first
+                        val char = sup.pickRandomGlyphByLumNoQnt(qntLum)
+
+                        aaframe.drawBuffer(x / sup.divW, y / sup.divH, char)
+                    }
+                    else {
+                        for (ySub in 0..sup.divH - 1)
+                            for (xSub in 0..sup.divW - 1)
+                                sup.ditherBuffer.set(x + xSub, y + ySub, sup.bufferPixelFontLum(x + xSub, y + ySub))
+                    }
+                }
+            }
+
+            // dither
+            // ref: http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/
+            if (sup.ditherAlgo > 0) {
+                // scan for ditherBuffer that is strecthed to Y
+                for (y in start..end step sup.divH) {
+                    for (x in 0..sup.w - 1 step sup.divW) {
+                        val oldPixel = sup.ditherBuffer.get(x, y)
+                        val newPixel = sup.findNearest(oldPixel)
+
+                        sup.ditherBuffer.set(x, y, newPixel)
+
+                        val error = oldPixel - newPixel
+
+                        // dither glyph-wise rather than pixel-wise
+                        for (haxX in 0..sup.divW - 1) {
+                            for (haxY in 0..sup.divH - 1) {
+                                // floyd-steinberg
+                                if (sup.ditherAlgo == sup.FLOYD_STEINBERG) {
+                                    sup.ditherBuffer.set(x + 1 + haxX, y + haxY, sup.ditherBuffer.get(x + 1 + haxX, y + haxY) + (error.times(7).shr(4)))
+                                    sup.ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(3).shr(4)))
+                                    sup.ditherBuffer.set(x + haxX, y + 1 + haxY, sup.ditherBuffer.get(x + haxX, y + 1 + haxY) + (error.times(5).shr(4)))
+                                    sup.ditherBuffer.set(x + 1 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x + 1 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
+                                }
+                                // sierra lite
+                                else if (sup.ditherAlgo == sup.SIERRA_LITE) {
+                                    sup.ditherBuffer.set(x + 1 + haxX, y + haxY, sup.ditherBuffer.get(x + 1 + haxX, y + haxY) + (error.times(2).shr(2)))
+                                    sup.ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(1).shr(2)))
+                                    sup.ditherBuffer.set(x + haxX, y + 1 + haxY, sup.ditherBuffer.get(x + haxX, y + 1 + haxY) + (error.times(1).shr(2)))
+                                }
+                                // sierra-2
+                                else if (sup.ditherAlgo == sup.SIERRA_2) {
+                                    sup.ditherBuffer.set(x + 1 + haxX, y + haxY, sup.ditherBuffer.get(x + 1 + haxX, y + haxY) + (error.times(4).shr(4)))
+                                    sup.ditherBuffer.set(x + 2 + haxX, y + haxY, sup.ditherBuffer.get(x + 2 + haxX, y + haxY) + (error.times(3).shr(4)))
+                                    sup.ditherBuffer.set(x - 2 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x - 2 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
+                                    sup.ditherBuffer.set(x - 1 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x - 1 + haxX, y + 1 + haxY) + (error.times(2).shr(4)))
+                                    sup.ditherBuffer.set(x + haxX, y + 1 + haxY, sup.ditherBuffer.get(x + haxX, y + 1 + haxY) + (error.times(3).shr(4)))
+                                    sup.ditherBuffer.set(x + 1 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x + 1 + haxX, y + 1 + haxY) + (error.times(2).shr(4)))
+                                    sup.ditherBuffer.set(x + 2 + haxX, y + 1 + haxY, sup.ditherBuffer.get(x + 2 + haxX, y + 1 + haxY) + (error.times(1).shr(4)))
+                                }
+                                else {
+                                    throw IllegalArgumentException("Unknown dithering algorithm: ${sup.ditherAlgo}")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ...and draw
+                for (y in start..end step sup.divH) {
+                    for (x in 0..sup.w - 1 step sup.divW) {
+                        val lum = Luminosity(sup.divSize, { sup.bufferPixelFontLum(x + it % sup.divW, y + it / sup.divW) })
+                        val char = sup.pickRandomGlyphByLumNoQnt(sup.findNearestLum(lum))
+
+                        aaframe.drawBuffer(x / sup.divW, y / sup.divH, char)
+                    }
+                }
+
+            }
+        }
+    }
 }
 
 class Luminosity(val size: Int, init: (Int) -> Int): Comparable<Luminosity> {
@@ -493,5 +608,4 @@ class Luminosity(val size: Int, init: (Int) -> Int): Comparable<Luminosity> {
             dist += (luminosity[i] - other.luminosity[i]) * (luminosity[i] - other.luminosity[i])
         return dist
     }
-
 }
